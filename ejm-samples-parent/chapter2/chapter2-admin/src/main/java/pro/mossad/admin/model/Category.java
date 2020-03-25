@@ -4,6 +4,7 @@
 package pro.mossad.admin.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,27 +39,27 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
 	@Column(name = "id", updatable = false, nullable = false)
 	private Integer id;
-	
+
 	@NotNull
 	@Size(min = 3, max = 50)
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
-	
+
 	private String header;
-	
+
 	private Boolean visible;
-	
+
 	@Column(name = "image_path", length = 120)
 	private String imagePath;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "parent_id")
 	private Category parent;
-	
+
 	private LocalDateTime created = LocalDateTime.now();
-	
+
 	private LocalDateTime updated;
-	
+
 	@Version
 	private Integer version = 0;
 
@@ -166,4 +167,26 @@ public class Category {
 	public Integer getVersion() {
 		return version;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+		Category category = (Category) obj;
+		return Objects.equals(id, category.id) && Objects.equals(name, category.name)
+				&& Objects.equals(header, category.header) && Objects.equals(visible, category.visible)
+				&& Objects.equals(imagePath, category.imagePath) && Objects.equals(parent, category.parent)
+				&& Objects.equals(created, category.created) && Objects.equals(updated, category.updated)
+				&& Objects.equals(version, category.version);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, header, visible, imagePath, parent, created, updated, version);
+	}
+
 }
